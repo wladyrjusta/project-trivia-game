@@ -1,5 +1,6 @@
-// import PropTypes from 'prop-types'
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import BtnSettings from '../components/BtnSettings';
 
 export default class Login extends Component {
   state = {
@@ -19,6 +20,7 @@ export default class Login extends Component {
 
   render() {
     const { email, name } = this.state;
+    const { history } = this.props;
 
     return (
       <div>
@@ -60,6 +62,8 @@ export default class Login extends Component {
           >
             Play
           </button>
+          {/* Apenas adicionei o botao */}
+          <BtnSettings history={ history } />
 
         </div>
 
@@ -67,3 +71,6 @@ export default class Login extends Component {
     );
   }
 }
+Login.propTypes = {
+  history: PropTypes.objectOf,
+}.isRequired;
