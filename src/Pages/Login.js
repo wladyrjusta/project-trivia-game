@@ -1,25 +1,41 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import md5 from 'crypto-js/md5';
 import BtnSettings from '../components/BtnSettings';
+import { actionLoginSuccess } from '../redux/actions';
+import { tokenEndpoint } from '../services/Api';
 
-export default class Login extends Component {
+class Login extends Component {
   state = {
 
     name: '',
-    email: '',
+    gravatarEmail: '',
   };
+
+  //   componentDidMount() {
+  //     const { fetchingToken } = this.props;
+  //     fetchingToken();
+  //   }
 
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
   };
 
-  handleClick = () => {
-    console.log('clicou');
+  handleClick = (e) => {
+    e.preventDefault();
+    const { history, infoLogin } = this.props;
+    const { gravatarEmail, name } = this.state;
+    const mdiHash = md5(gravatarEmail).toString();
+    const imgGravatar = `https://www.gravatar.com/avatar/${mdiHash}`;
+    infoLogin({ name, gravatarEmail, imgGravatar });
+
+    history.push('/game');
   };
 
   render() {
-    const { email, name } = this.state;
+    const { gravatarEmail, name } = this.state;
     const { history } = this.props;
 
     return (
@@ -47,8 +63,8 @@ export default class Login extends Component {
             type="email"
             data-testid="input-gravatar-email"
             id="email"
-            name="email"
-            value={ email }
+            name="gravatarEmail"
+            value={ gravatarEmail }
             onChange={ this.handleChange }
           />
         </label>
@@ -58,7 +74,7 @@ export default class Login extends Component {
             data-testid="btn-play"
             type="button"
             onClick={ this.handleClick }
-            disabled={ email.length === 0 || name.length === 0 }
+            disabled={ gravatarEmail.length === 0 || name.length === 0 }
           >
             Play
           </button>
@@ -74,3 +90,10 @@ export default class Login extends Component {
 Login.propTypes = {
   history: PropTypes.objectOf,
 }.isRequired;
+
+const mapDispatchToProps = {
+  fetchingToken: tokenEndpoint,
+  infoLogin: actionLoginSuccess,
+};
+
+export default connect(null, mapDispatchToProps)(Login);
