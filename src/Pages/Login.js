@@ -25,11 +25,12 @@ class Login extends Component {
 
   handleClick = (e) => {
     e.preventDefault();
-    const { history, infoLogin } = this.props;
+    const { history, infoLogin, fetchingToken } = this.props;
     const { gravatarEmail, name } = this.state;
     const mdiHash = md5(gravatarEmail).toString();
     const imgGravatar = `https://www.gravatar.com/avatar/${mdiHash}`;
     infoLogin({ name, gravatarEmail, imgGravatar });
+    fetchingToken(tokenEndpoint());
 
     history.push('/game');
   };
@@ -74,7 +75,8 @@ class Login extends Component {
             data-testid="btn-play"
             type="button"
             onClick={ this.handleClick }
-            disabled={ gravatarEmail.length === 0 || name.length === 0 }
+            disabled={ !gravatarEmail
+              .match(/\S+@\S+\.\S+/) || name.length === 0 }
           >
             Play
           </button>
