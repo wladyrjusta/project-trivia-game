@@ -37,7 +37,7 @@ class Login extends Component {
   render() {
     const { gravatarEmail, name } = this.state;
     const { history } = this.props;
-    console.log(this.props);
+    // console.log(this.props);
 
     return (
       <div>
