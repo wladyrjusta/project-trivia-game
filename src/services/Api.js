@@ -1,6 +1,5 @@
 import { tokenNumber,
   success,
-  questionsReceived,
 }
   from '../redux/actions/index';
 
