@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Questions.css';
 // import { connect } from 'react-redux';
 // import { questionsEndpoint } from '../services/Api';
 
@@ -7,6 +8,8 @@ class Questions extends React.Component {
   state = {
     indexQuestions: 0,
     arrayQuestion: [],
+    answered: false,
+    randomAnswer: [],
   };
 
   async componentDidMount() {
@@ -24,10 +27,11 @@ class Questions extends React.Component {
       localStorage.removeItem('token');
       history.push('/');
     }
+    this.questionRender(resultsQuestions);
   }
 
-  questionRender = () => {
-    const { indexQuestions, arrayQuestion } = this.state;
+  questionRender = (arrayQuestion) => {
+    const { indexQuestions } = this.state;
     if (arrayQuestion.length > 0) {
       const correctRender = {
         dataTestid: 'correct-answer',
@@ -48,16 +52,21 @@ class Questions extends React.Component {
       ];
       const magicNumber = 0.5;
       const misturaAnswer = questionsAll.sort(() => magicNumber - Math.random());
-      // this.setState({
-      //   randomAnswer: misturaAnswer,
-      // });
-      return misturaAnswer;
+      this.setState({
+        randomAnswer: misturaAnswer,
+      });
+      // return misturaAnswer;
     }
   };
 
+  btnChangeColor = () => {
+    this.setState({
+      answered: true,
+    });
+  };
+
   render() {
-    const { arrayQuestion, indexQuestions } = this.state;
-    const catchAll = this.questionRender();
+    const { arrayQuestion, indexQuestions, answered, randomAnswer } = this.state;
     return (
     //   <div>
     //     {arrayQuestion.length > 0 && (
@@ -73,7 +82,6 @@ class Questions extends React.Component {
     //         <div data-testid="answer-options">
     //           {
     //           arrayQuestion.length > 0 && (
-    //             catchAll.map((a) => {
     //               <button
     //                 key={ a.question }
     //                 className={ a.question }
@@ -105,12 +113,14 @@ class Questions extends React.Component {
         <div data-testid="answer-options">
 
           {arrayQuestion.length > 0 && (
-            catchAll.map((a) => (
+            randomAnswer.map((a) => (
               <button
                 key={ a.questionsOk }
-                className={ a.questionsOk }
+                className={ answered ? a.color : '' }
                 data-testid={ a.dataTestid }
                 value={ a.correct }
+                onClick={ () => this.btnChangeColor() }
+
               >
                 {a.questionsOk}
               </button>
