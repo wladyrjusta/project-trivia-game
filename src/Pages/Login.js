@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import md5 from 'crypto-js/md5';
+// import md5 from 'crypto-js/md5';
 import BtnSettings from '../components/BtnSettings';
-import { actionLoginSuccess } from '../redux/actions';
-import { tokenEndpoint } from '../services/Api';
+// import { actionLoginSuccess } from '../redux/actions';
+// import { tokenEndpoint } from '../services/Api';
+import { USERS_INFO_SAVED, actionHandled, acessUserRequest } from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -12,32 +13,33 @@ class Login extends Component {
     gravatarEmail: '',
   };
 
-  //   componentDidMount() {
-  //     const { fetchingToken } = this.props;
-  //     fetchingToken();
-  //   }
-
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
   };
 
-  handleClick = (e) => {
-    e.preventDefault();
-    const { history, infoLogin, fetchingToken } = this.props;
-    const { gravatarEmail, name } = this.state;
-    const mdiHash = md5(gravatarEmail).toString();
-    const imgGravatar = `https://www.gravatar.com/avatar/${mdiHash}`;
-    infoLogin({ name, gravatarEmail, imgGravatar });
-    fetchingToken(tokenEndpoint());
+  // handleClick = (e) => {
+  //   e.preventDefault();
+  //   const { history, infoLogin, fetchingToken } = this.props;
+  //   const { gravatarEmail, name } = this.state;
+  //   const mdiHash = md5(gravatarEmail).toString();
+  //   const imgGravatar = `https://www.gravatar.com/avatar/${mdiHash}`;
+  //   infoLogin({ name, gravatarEmail, imgGravatar });
+  //   fetchingToken(tokenEndpoint());
 
+  //   history.push('/game');
+  // };
+
+  handleClick = async () => {
+    const { history, dispatch } = this.props;
+    dispatch(actionHandled(USERS_INFO_SAVED, this.state));
+    await dispatch(acessUserRequest());
     history.push('/game');
   };
 
   render() {
     const { gravatarEmail, name } = this.state;
     const { history } = this.props;
-    // console.log(this.props);
 
     return (
       <div>
@@ -93,9 +95,4 @@ Login.propTypes = {
   history: PropTypes.objectOf,
 }.isRequired;
 
-const mapDispatchToProps = {
-  fetchingToken: tokenEndpoint,
-  infoLogin: actionLoginSuccess,
-};
-
-export default connect(null, mapDispatchToProps)(Login);
+export default connect()(Login);

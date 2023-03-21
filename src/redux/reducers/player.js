@@ -1,22 +1,27 @@
-import { ACTION_LOGIN_SUCCESS, SUCCESS,
+import { USERS_INFO_SAVED, ACESS_REQUEST,
 } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
   gravatarEmail: '',
+  assertions: '',
+  score: '',
+  token: '',
   // isLoading: false,
 };
 
 function player(state = INITIAL_STATE, action) {
   switch (action.type) {
-  case ACTION_LOGIN_SUCCESS:
+  case USERS_INFO_SAVED:
     return {
       ...state,
-      ...action.payload,
+      name: action.payload.name,
+      gravatarEmail: action.payload.gravatarEmail,
     };
-  case SUCCESS:
+  case ACESS_REQUEST:
     return {
-      ...state, // sem o isLoading
+      ...state,
+      token: action.payload, // sem o isLoading
     };
 
     // Sem o FetchStart
