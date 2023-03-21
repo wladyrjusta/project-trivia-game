@@ -8,7 +8,6 @@ import { tokenEndpoint } from '../services/Api';
 
 class Login extends Component {
   state = {
-
     name: '',
     gravatarEmail: '',
   };
@@ -38,6 +37,7 @@ class Login extends Component {
   render() {
     const { gravatarEmail, name } = this.state;
     const { history } = this.props;
+    console.log(this.props);
 
     return (
       <div>
@@ -80,7 +80,7 @@ class Login extends Component {
           >
             Play
           </button>
-          {/* Apenas adicionei o botao */}
+
           <BtnSettings history={ history } />
 
         </div>
