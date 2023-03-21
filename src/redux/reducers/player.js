@@ -1,10 +1,10 @@
-import { ACTION_LOGIN_SUCCESS, SUCCESS, FETCHING_START } from '../actions';
+import { ACTION_LOGIN_SUCCESS, SUCCESS,
+} from '../actions';
 
 const INITIAL_STATE = {
   name: '',
   gravatarEmail: '',
-  isLoading: false,
-
+  // isLoading: false,
 };
 
 function player(state = INITIAL_STATE, action) {
@@ -16,13 +16,10 @@ function player(state = INITIAL_STATE, action) {
     };
   case SUCCESS:
     return {
-      ...state, isLoading: false,
+      ...state, // sem o isLoading
     };
 
-  case FETCHING_START:
-    return {
-      ...state, isLoading: true,
-    };
+    // Sem o FetchStart
   default:
     return state;
   }
