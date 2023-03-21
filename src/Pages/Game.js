@@ -1,37 +1,73 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { questionsEndpoint } from '../services/Api';
+// import { questionsEndpoint } from '../services/Api';
 
 class Game extends React.Component {
   state = {
     indexQuestions: 0,
+    randomAnswer: [],
+    arrayQuestion: [],
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const recoveredQuestion = localStorage.getItem('token');
-    const { dispatch, allQuestions } = this.props;
-    dispatch(questionsEndpoint([recoveredQuestion]));
+    // const { dispatch, allQuestions } = this.props;
+    const url = await (await fetch(`https://opentdb.com/api.php?amount=5&token=${recoveredQuestion}`)).json();
+    const resultsQuestions = url.results;
+    this.setState({
+      arrayQuestion: resultsQuestions,
+    });
+    // dispatch(questionsEndpoint([recoveredQuestion]));
     const invalidToken = 3;
-    if (allQuestions.response_code === invalidToken) {
+    if (url.response_code === invalidToken) {
       const { history } = this.props;
       localStorage.removeItem('token');
       history.push('/');
     }
   }
 
+  questionRender = () => {
+    const { indexQuestions, arrayQuestion } = this.state;
+    if (arrayQuestion.length > 0) {
+      const correctRender = {
+        dataTestid: 'correct-answer',
+        correctRender: true,
+        questionsOk: arrayQuestion[indexQuestions].correct_answer,
+        color: 'green',
+      };
+      const incorrectRender = arrayQuestion[indexQuestions].incorrect_answers
+        .map((answer, index) => ({
+          dataTestid: `wrong-answer-${index}`,
+          correctRender: false,
+          questionsOk: answer,
+          color: 'red',
+        }));
+      const questionsAll = [
+        ...incorrectRender,
+        correctRender,
+      ];
+      const magicNumber = 0.5;
+      const misturaAnswer = questionsAll.sort(() => magicNumber - Math.random());
+      this.setState({
+        randomAnswer: misturaAnswer,
+      });
+    }
+  };
+
   render() {
-    const { allQuestions } = this.props;
-    const { indexQuestions } = this.state;
+    const { arrayQuestion } = this.props;
+    const { indexQuestions, arrayQuestion } = this.state;
     return (
       <div>
-        {allQuestions.length > 0 && (
+
+        {arrayQuestion.length > 0 && (
           <>
             <p data-testid="question-category">
-              {allQuestions[indexQuestions].category}
+              {arrayQuestion[indexQuestions].category}
             </p>
             <p data-testid="question-text">
-              {allQuestions[indexQuestions].question}
+              {arrayQuestion[indexQuestions].question}
             </p>
 
             <div data-testid="answer-options">
@@ -43,11 +79,11 @@ class Game extends React.Component {
                 // disabled={}
                 data-testid="correct-answer"
               >
-                {allQuestions[indexQuestions].correct_answer }
+                {arrayQuestion[indexQuestions].correct_answer }
 
               </button>
 
-              {allQuestions[indexQuestions].incorrect_answers
+              {arrayQuestion[indexQuestions].incorrect_answers
                 .map((incorrect, index) => (
                   <button
                     type="button"
