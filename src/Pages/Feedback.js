@@ -24,6 +24,7 @@ class Feedback extends React.Component {
           <span data-testid="feedback-total-score">[colocar o valor do score] </span>
           <h2>Acertos :</h2>
           <span data-testid="feedback-total-question">[colocar o valor assertions]</span>
+          <span data-testid="feedback-text">[Colocar mensagem de feedBack]</span>
         </div>
         {/* <h2>{ this.feedbackMessage() }</h2> */}
       </div>
