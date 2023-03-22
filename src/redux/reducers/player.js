@@ -4,10 +4,9 @@ import { USERS_INFO_SAVED, ACESS_REQUEST, UPDATE_SCORE,
 const INITIAL_STATE = {
   name: '',
   gravatarEmail: '',
-  assertions: '',
+  assertions: 0,
   score: 0,
   token: '',
-  // isLoading: false,
 };
 
 function player(state = INITIAL_STATE, action) {

@@ -22,6 +22,7 @@ class Questions extends React.Component {
   }
 
   componentDidUpdate() {
+    // Nao entendi 100% se o cypress quer que seja redirecionado logo apos repsonder a ultima pergunta ou apos clicar no Next depois disso
     // const { history } = this.props;
     // const {
     //   indexQuestions,
@@ -129,6 +130,7 @@ class Questions extends React.Component {
     // Nao altera nada quando a resposta e errada, pelo menos por enquanto
   };
 
+  // Esta com delay, esta renderizando o novo texto da pergunta mas os botoes estao sendo rendererizados da pergunta anterior
   handleClickNext = () => {
     const { arrayQuestion, indexQuestions } = this.state;
     const limitOfQuestions = 5;
@@ -210,15 +212,6 @@ class Questions extends React.Component {
 Questions.propTypes = {
   fetchingQuestions: PropTypes.func,
 }.isRequired;
-
-// const mapDispatchToProps = {
-//   fetchingQuestions: questionsEndpoint,
-// };
-
-// const mapStateToProps = (state) => ({
-//   ...state.player,
-//   ...state.game,
-// });
 
 export default connect()(Questions);
 // so criei aqui pra ser renderizado no login
