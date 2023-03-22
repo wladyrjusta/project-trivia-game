@@ -133,6 +133,7 @@ class Questions extends React.Component {
   // Esta com delay, esta renderizando o novo texto da pergunta mas os botoes estao sendo rendererizados da pergunta anterior
   handleClickNext = () => {
     const { arrayQuestion, indexQuestions } = this.state;
+    const { history } = this.props;
     const limitOfQuestions = 5;
 
     if (indexQuestions < limitOfQuestions - 1) {
@@ -146,6 +147,12 @@ class Questions extends React.Component {
     // } else if (indexQuestions >= limitOfQuestions - 1) {
     //   this.questionRender(arrayQuestion);
     // }
+
+    const lengthIndexOfQuestions = 3;
+
+    if (indexQuestions > lengthIndexOfQuestions) {
+      history.push('/feedback');
+    }
   };
 
   render() {
@@ -158,7 +165,6 @@ class Questions extends React.Component {
     } = this.state;
 
     return (
-
       <div>
 
         {arrayQuestion.length > 0 && (
@@ -211,6 +217,9 @@ class Questions extends React.Component {
 
 Questions.propTypes = {
   fetchingQuestions: PropTypes.func,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
 }.isRequired;
 
 export default connect()(Questions);
