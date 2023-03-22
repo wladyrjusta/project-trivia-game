@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './Questions.css';
-
-
-// import { connect } from 'react-redux';
-// import { questionsEndpoint } from '../services/Api';
+import { connect } from 'react-redux';
+import { UPDATE_SCORE, actionHandled } from '../redux/actions';
 
 class Questions extends React.Component {
   state = {
@@ -16,10 +14,10 @@ class Questions extends React.Component {
   };
 
   async componentDidMount() {
-    const timer = 1000;
+    const timerReload = 1000;
     const resultsQuestions = await this.questionsFetch();
     this.questionRender(resultsQuestions);
-    setInterval(() => this.setTimer(), timer);
+    setInterval(() => this.setTimer(), timerReload);
   }
 
   // Separei a Requisicao a API do ComponentDidMount
@@ -40,20 +38,23 @@ class Questions extends React.Component {
 
   questionRender = (arrayQuestion) => {
     const { indexQuestions } = this.state;
+    console.log(arrayQuestion);
     if (arrayQuestion.length > 0) {
       const correctRender = {
         dataTestid: 'correct-answer',
         correctRender: true,
-        questionsOk: arrayQuestion[indexQuestions].correct_answer,
+        questionText: arrayQuestion[indexQuestions].correct_answer,
         color: 'green',
+        difficulty: arrayQuestion[indexQuestions].difficulty,
       };
 
       const incorrectRender = arrayQuestion[indexQuestions].incorrect_answers
         .map((answer, index) => ({
           dataTestid: `wrong-answer-${index}`,
           correctRender: false,
-          questionsOk: answer,
+          questionText: answer,
           color: 'red',
+          difficulty: arrayQuestion[indexQuestions].difficulty,
         }));
       const questionsAll = [
         ...incorrectRender,
@@ -85,10 +86,30 @@ class Questions extends React.Component {
     }
   };
 
-  btnChangeColor = () => {
+  handleClick = (id, difficulty) => {
+    const { dispatch } = this.props;
+    const { timer } = this.state;
+    const scoresParameter = 10;
+    const hardParameter = 3;
+    const MediumParameter = 2;
+    let multiplier = 1;
+
     this.setState({
       answered: true,
+      timer: 0,
     });
+    if (difficulty === 'hard') {
+      multiplier = hardParameter;
+    }
+    if (difficulty === 'medium') {
+      multiplier = MediumParameter;
+    }
+
+    if (id === 'correct-answer') {
+      const scoresValue = scoresParameter + (timer * multiplier);
+      dispatch(actionHandled(UPDATE_SCORE, scoresValue));
+    }
+    // Nao altera nada quando a resposta e errada, pelo menos por enquanto
   };
 
   render() {
@@ -99,34 +120,8 @@ class Questions extends React.Component {
       mixedQuestions,
       timer,
     } = this.state;
-    return (
-    //   <div>
-    //     {arrayQuestion.length > 0 && (
-    //       <>
-    //         <p data-testid="question-category">
-    //           {arrayQuestion[indexQuestions].category}
-    //         </p>
-    //         <p data-testid="question-text">
-    //           {arrayQuestion[indexQuestions].question}
-    //         </p>
-    //       </>
-    //     )}
-    //         <div data-testid="answer-options">
-    //           {
-    //           arrayQuestion.length > 0 && (
-    //               <button
-    //                 key={ a.question }
-    //                 className={ a.question }
-    //                 data-testid={ a.dataTestid }
-    //                 value={ a.correct }
-    //               >
-    //                 {a.question}
-    //               </button>;
-    //             ))
-    // )
-    //             }
 
-    //   </div>
+    return (
 
       <div>
 
@@ -139,25 +134,23 @@ class Questions extends React.Component {
               {arrayQuestion[indexQuestions].question}
             </p>
           </>
-
         ) }
 
         <div data-testid="answer-options">
-
           {arrayQuestion.length > 0 && (
             mixedQuestions.map((a) => (
               <button
-                key={ a.questionsOk }
+                key={ a.questionText }
                 className={ answered ? a.color : '' }
                 data-testid={ a.dataTestid }
                 value={ a.correct }
-                onClick={ () => this.btnChangeColor() }
+                onClick={ () => { this.handleClick(a.dataTestid, a.difficulty); } }
                 disabled={ answered }
               >
-                {a.questionsOk}
+                {/* Testar depois renderizar o a.questionsText dentro do botao */}
+                {a.questionText}
               </button>
             ))
-
           )}
         </div>
 
@@ -182,5 +175,5 @@ Questions.propTypes = {
 //   ...state.game,
 // });
 
-export default Questions;
+export default connect()(Questions);
 // so criei aqui pra ser renderizado no login

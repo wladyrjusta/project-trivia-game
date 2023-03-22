@@ -1,11 +1,11 @@
-import { USERS_INFO_SAVED, ACESS_REQUEST,
+import { USERS_INFO_SAVED, ACESS_REQUEST, UPDATE_SCORE,
 } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
   gravatarEmail: '',
   assertions: '',
-  score: '',
+  score: 0,
   token: '',
   // isLoading: false,
 };
@@ -22,6 +22,11 @@ function player(state = INITIAL_STATE, action) {
     return {
       ...state,
       token: action.payload, // sem o isLoading
+    };
+  case UPDATE_SCORE:
+    return {
+      ...state,
+      score: state.score + action.payload,
     };
 
     // Sem o FetchStart
