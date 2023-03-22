@@ -18,7 +18,7 @@ class Questions extends React.Component {
     this.questionRender(arrayQuestion);
     const timerReload = 1000;
     setInterval(() => this.setTimer(), timerReload);
-    console.log(arrayQuestion);
+    // console.log(arrayQuestion);
   }
 
   componentDidUpdate() {
@@ -52,7 +52,7 @@ class Questions extends React.Component {
 
   questionRender = (arrayQuestion) => {
     const { indexQuestions } = this.state;
-    console.log('indexQuestions', indexQuestions);
+    // console.log('indexQuestions', indexQuestions);
     // console.log(arrayQuestion);
     if (arrayQuestion.length > 0) {
       const correctRender = {

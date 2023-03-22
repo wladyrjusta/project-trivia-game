@@ -19,7 +19,7 @@ class Feedback extends React.Component {
   informations() {
     const { player, history } = this.props;
     if (!localStorage.getItem('users')) {
-      localStorage.setItem('users', JSON.stringify(player, score));
+      localStorage.setItem('users', JSON.stringify(player));
     } else {
       const addUser = JSON.parse(localStorage.getItem('users'));
       const users = [...addUser, player];
@@ -31,7 +31,7 @@ class Feedback extends React.Component {
 
   render() {
     const { history } = this.props;
-    const { assertions, score } = this.props;
+    const { player: { assertions, score } } = this.props;
     return (
       <div>
         <Header />
@@ -64,7 +64,7 @@ class Feedback extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  ...state.player,
+  ...state,
 });
 
 Feedback.propTypes = {
