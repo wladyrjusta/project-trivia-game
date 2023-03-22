@@ -14,9 +14,9 @@ class Questions extends React.Component {
   };
 
   async componentDidMount() {
+    const arrayQuestion = await this.questionsFetch();
+    this.questionRender(arrayQuestion);
     const timerReload = 1000;
-    const resultsQuestions = await this.questionsFetch();
-    this.questionRender(resultsQuestions);
     setInterval(() => this.setTimer(), timerReload);
   }
 
@@ -38,7 +38,7 @@ class Questions extends React.Component {
 
   questionRender = (arrayQuestion) => {
     const { indexQuestions } = this.state;
-    console.log(arrayQuestion);
+    // console.log(arrayQuestion);
     if (arrayQuestion.length > 0) {
       const correctRender = {
         dataTestid: 'correct-answer',
@@ -60,6 +60,7 @@ class Questions extends React.Component {
         ...incorrectRender,
         correctRender,
       ];
+      // console.log(questionsAll);
       this.mixQuestions(questionsAll);
     }
   };
@@ -68,6 +69,7 @@ class Questions extends React.Component {
   mixQuestions = (questions) => {
     const magicNumber = 0.5;
     const mixedQuestions = questions.sort(() => magicNumber - Math.random());
+    // console.log(mixedQuestions);
     this.setState({
       mixedQuestions,
     });
@@ -75,6 +77,7 @@ class Questions extends React.Component {
 
   setTimer = () => {
     const { timer } = this.state;
+
     if (timer > 0) {
       this.setState((prevState) => ({
         timer: prevState.timer - 1,
@@ -86,7 +89,7 @@ class Questions extends React.Component {
     }
   };
 
-  handleClick = (id, difficulty) => {
+  handleClickAnswer = (id, difficulty) => {
     const { dispatch } = this.props;
     const { timer } = this.state;
     const scoresParameter = 10;
@@ -112,6 +115,22 @@ class Questions extends React.Component {
     // Nao altera nada quando a resposta e errada, pelo menos por enquanto
   };
 
+  handleClickNext = () => {
+    const { arrayQuestion, indexQuestions } = this.state;
+    const limitOfQuestions = 5;
+
+    if (indexQuestions < limitOfQuestions - 1) {
+      this.setState({
+        answered: false,
+        timer: 30,
+        indexQuestions: indexQuestions + 1,
+      });
+
+      this.questionRender(arrayQuestion);
+    }
+    // console.log(indexQuestions);
+  };
+
   render() {
     const {
       arrayQuestion,
@@ -120,6 +139,12 @@ class Questions extends React.Component {
       mixedQuestions,
       timer,
     } = this.state;
+    // const indexLimit = 4;
+    // let nextButtonVisible = false;
+    // if ((answered === true) && (indexQuestions < indexLimit)) {
+    //   nextButtonVisible = true;
+    //   return nextButtonVisible;
+    // }
 
     return (
 
@@ -144,10 +169,9 @@ class Questions extends React.Component {
                 className={ answered ? a.color : '' }
                 data-testid={ a.dataTestid }
                 value={ a.correct }
-                onClick={ () => { this.handleClick(a.dataTestid, a.difficulty); } }
+                onClick={ () => { this.handleClickAnswer(a.dataTestid, a.difficulty); } }
                 disabled={ answered }
               >
-                {/* Testar depois renderizar o a.questionsText dentro do botao */}
                 {a.questionText}
               </button>
             ))
@@ -157,6 +181,20 @@ class Questions extends React.Component {
         <div>
           {timer}
         </div>
+        { answered && (
+          <div>
+            {console.log(indexQuestions)}
+            <button
+              key="nextButton"
+              data-testid="btn-next"
+              // value={ a.correct }
+              onClick={ () => { this.handleClickNext(); } }
+            >
+              Next
+            </button>
+          </div>
+        )}
+
       </div>
     );
   }
