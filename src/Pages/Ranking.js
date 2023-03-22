@@ -11,8 +11,9 @@ export default class Ranking extends Component {
   }
 
   render() {
-    const getRanking = JSON.parse(localStorage.getItem('users'));
-    console.log('getrANKING', getRanking);
+    const getUsersRanking = JSON.parse(localStorage.getItem('users'));
+    console.log('getRanking', getUsersRanking);
+
     return (
       <div>
         <h2 data-testid="ranking-title">Ranking</h2>
@@ -26,13 +27,12 @@ export default class Ranking extends Component {
 
         </Link>
 
-        {getRanking.map((info, index) => (
+        {getUsersRanking.map((info, index) => (
           <div
             key={ index }
           >
-            {console.log(info.name)}
             <img
-              src={ `${() => this.getImg(info.gravatarEmail)}` }
+              src={ this.getImg(info.gravatarEmail) }
               alt={ info.name }
             />
             <h3

@@ -3,8 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import { RESET_GAME, actionHandled } from '../redux/actions';
 
 class Feedback extends React.Component {
+  componentDidMount() {
+    this.addUserToLocalStorage();
+  }
+
   feedbackMessage = () => {
     const { assertions } = this.props;
     const magicNumber = 3;
@@ -16,21 +21,40 @@ class Feedback extends React.Component {
     }
   };
 
-  informations() {
-    const { player, history } = this.props;
-    if (!localStorage.getItem('users')) {
-      localStorage.setItem('users', JSON.stringify(player, score));
-    } else {
-      const addUser = JSON.parse(localStorage.getItem('users'));
-      const users = [...addUser, player];
-      const userSortDescending = users.sort((a, b) => b.score - a.score);
-      localStorage.setItem('users', JSON.stringify(userSortDescending));
-    }
+  addUserToLocalStorage = () => {
+    const {
+      name,
+      gravatarEmail,
+      assertions,
+      score,
+    } = this.props;
+
+    const user = {
+      name,
+      gravatarEmail,
+      assertions,
+      score,
+    };
+    const getUsers = JSON.parse(localStorage.getItem('users')) || [];
+    console.log('GetUSER', getUsers);
+    const users = [...getUsers, user];
+    const userSortDescending = users.sort((a, b) => b.score - a.score);
+    localStorage.setItem('users', JSON.stringify(userSortDescending));
+  };
+
+  handleClickPlayAgain = () => {
+    const { dispatch, history } = this.props;
+    dispatch(actionHandled(RESET_GAME));
+    history.push('/');
+  };
+
+  handleClickRanking = () => {
+    const { dispatch, history } = this.props;
+    dispatch(actionHandled(RESET_GAME));
     history.push('/ranking');
-  }
+  };
 
   render() {
-    const { history } = this.props;
     const { assertions, score } = this.props;
     return (
       <div>
@@ -44,16 +68,16 @@ class Feedback extends React.Component {
         </div>
         <button
           data-testid="btn-play-again"
-          onClick={ () => history.push('/') }
+          onClick={ () => this.handleClickPlayAgain() }
         >
           Play Again
         </button>
-        {/* <h2>{ this.feedbackMessage() }</h2> */}
+
         <Link to="/ranking">
           <button
             type="button"
             data-testid="btn-ranking"
-            onClick={ () => this.informations() }
+            onClick={ () => this.handleClickRanking() }
           >
             VER RANKING
           </button>
