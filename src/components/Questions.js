@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Questions.css';
 import { connect } from 'react-redux';
-import { UPDATE_SCORE, actionHandled } from '../redux/actions';
+import { UPDATE_SCORE, actionHandled, assertionsNumber } from '../redux/actions';
 
 class Questions extends React.Component {
   state = {
@@ -126,6 +126,7 @@ class Questions extends React.Component {
     if (id === 'correct-answer') {
       const scoresValue = scoresParameter + (timer * multiplier);
       dispatch(actionHandled(UPDATE_SCORE, scoresValue));
+      dispatch(assertionsNumber(1));
     }
     // Nao altera nada quando a resposta e errada, pelo menos por enquanto
   };
