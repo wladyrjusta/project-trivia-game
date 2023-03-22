@@ -18,6 +18,19 @@ class Questions extends React.Component {
     this.questionRender(arrayQuestion);
     const timerReload = 1000;
     setInterval(() => this.setTimer(), timerReload);
+    console.log(arrayQuestion);
+  }
+
+  componentDidUpdate() {
+    // const { history } = this.props;
+    // const {
+    //   indexQuestions,
+    //   answered,
+    // } = this.state;
+    // const indexLimit = 5;
+    // if (answered && (indexQuestions === indexLimit)) {
+    //   history.push('/feedback');
+    // }
   }
 
   // Separei a Requisicao a API do ComponentDidMount
@@ -38,6 +51,7 @@ class Questions extends React.Component {
 
   questionRender = (arrayQuestion) => {
     const { indexQuestions } = this.state;
+    console.log('indexQuestions', indexQuestions);
     // console.log(arrayQuestion);
     if (arrayQuestion.length > 0) {
       const correctRender = {
@@ -125,10 +139,11 @@ class Questions extends React.Component {
         timer: 30,
         indexQuestions: indexQuestions + 1,
       });
-
       this.questionRender(arrayQuestion);
     }
-    // console.log(indexQuestions);
+    // } else if (indexQuestions >= limitOfQuestions - 1) {
+    //   this.questionRender(arrayQuestion);
+    // }
   };
 
   render() {
@@ -139,12 +154,6 @@ class Questions extends React.Component {
       mixedQuestions,
       timer,
     } = this.state;
-    // const indexLimit = 4;
-    // let nextButtonVisible = false;
-    // if ((answered === true) && (indexQuestions < indexLimit)) {
-    //   nextButtonVisible = true;
-    //   return nextButtonVisible;
-    // }
 
     return (
 
@@ -183,11 +192,9 @@ class Questions extends React.Component {
         </div>
         { answered && (
           <div>
-            {console.log(indexQuestions)}
             <button
               key="nextButton"
               data-testid="btn-next"
-              // value={ a.correct }
               onClick={ () => { this.handleClickNext(); } }
             >
               Next
