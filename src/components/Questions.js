@@ -21,20 +21,6 @@ class Questions extends React.Component {
     // console.log(arrayQuestion);
   }
 
-  componentDidUpdate() {
-    // Nao entendi 100% se o cypress quer que seja redirecionado logo apos repsonder a ultima pergunta ou apos clicar no Next depois disso
-    // const { history } = this.props;
-    // const {
-    //   indexQuestions,
-    //   answered,
-    // } = this.state;
-    // const indexLimit = 5;
-    // if (answered && (indexQuestions === indexLimit)) {
-    //   history.push('/feedback');
-    // }
-  }
-
-  // Separei a Requisicao a API do ComponentDidMount
   questionsFetch = async () => {
     const recoveredQuestion = localStorage.getItem('token');
     const url = await (await fetch(`https://opentdb.com/api.php?amount=5&token=${recoveredQuestion}`)).json();
@@ -52,8 +38,6 @@ class Questions extends React.Component {
 
   questionRender = (arrayQuestion) => {
     const { indexQuestions } = this.state;
-    // console.log('indexQuestions', indexQuestions);
-    // console.log(arrayQuestion);
     if (arrayQuestion.length > 0) {
       const correctRender = {
         dataTestid: 'correct-answer',
@@ -75,16 +59,13 @@ class Questions extends React.Component {
         ...incorrectRender,
         correctRender,
       ];
-      // console.log(questionsAll);
       this.mixQuestions(questionsAll);
     }
   };
 
-  // Separei a logica que aleatoriza as questoes para ficar mais organizado
   mixQuestions = (questions) => {
     const magicNumber = 0.5;
     const mixedQuestions = questions.sort(() => magicNumber - Math.random());
-    // console.log(mixedQuestions);
     this.setState({
       mixedQuestions,
     });
@@ -128,7 +109,6 @@ class Questions extends React.Component {
       dispatch(actionHandled(UPDATE_SCORE, scoresValue));
       dispatch(assertionsNumber(1));
     }
-    // Nao altera nada quando a resposta e errada, pelo menos por enquanto
   };
 
   // Esta com delay, esta renderizando o novo texto da pergunta mas os botoes estao sendo rendererizados da pergunta anterior
@@ -145,9 +125,6 @@ class Questions extends React.Component {
       });
       this.questionRender(arrayQuestion);
     }
-    // } else if (indexQuestions >= limitOfQuestions - 1) {
-    //   this.questionRender(arrayQuestion);
-    // }
 
     const lengthIndexOfQuestions = 3;
 
@@ -224,4 +201,3 @@ Questions.propTypes = {
 }.isRequired;
 
 export default connect()(Questions);
-// so criei aqui pra ser renderizado no login

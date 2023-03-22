@@ -13,7 +13,6 @@ export default class Ranking extends Component {
   render() {
     const getUsersRanking = JSON.parse(localStorage.getItem('users'));
     console.log('getRanking', getUsersRanking);
-    // console.log(testOnePlayer);
 
     return (
       <div>

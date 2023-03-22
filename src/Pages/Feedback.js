@@ -35,13 +35,10 @@ class Feedback extends React.Component {
       assertions,
       score,
     };
-    // console.log(user); // TESTADO CORRETO {name: 'Projeto', gravatarEmail: 'bgvgvgv@gg.com', assertions: 1, score: 70}
     const getUsers = JSON.parse(localStorage.getItem('users')) || [];
     console.log('GetUSER', getUsers);
     const users = [...getUsers, user];
-    // console.log('users antes de sort', users); TESTADO
     const userSortDescending = users.sort((a, b) => b.score - a.score);
-    // console.log(users); TESTADO
     localStorage.setItem('users', JSON.stringify(userSortDescending));
   };
 
