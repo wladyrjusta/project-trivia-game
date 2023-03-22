@@ -16,6 +16,19 @@ class Feedback extends React.Component {
     }
   };
 
+  informations() {
+    const { player, history } = this.props;
+    if (!localStorage.getItem('users')) {
+      localStorage.setItem('users', JSON.stringify(player, score));
+    } else {
+      const addUser = JSON.parse(localStorage.getItem('users'));
+      const users = [...addUser, player];
+      const userSortDescending = users.sort((a, b) => b.score - a.score);
+      localStorage.setItem('users', JSON.stringify(userSortDescending));
+    }
+    history.push('/ranking');
+  }
+
   render() {
     const { history } = this.props;
     const { assertions, score } = this.props;
@@ -40,6 +53,7 @@ class Feedback extends React.Component {
           <button
             type="button"
             data-testid="btn-ranking"
+            onClick={ () => this.informations() }
           >
             VER RANKING
           </button>
@@ -59,7 +73,7 @@ Feedback.propTypes = {
   }).isRequired,
   assertions: PropTypes.number,
   score: PropTypes.number,
-};
+}.isRequired;
 
 Feedback.defaultProps = {
   score: 0,
