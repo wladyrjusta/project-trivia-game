@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import { RESET_GAME, actionHandled } from '../redux/actions';
 
 class Feedback extends React.Component {
   componentDidMount() {
@@ -44,16 +45,19 @@ class Feedback extends React.Component {
     localStorage.setItem('users', JSON.stringify(userSortDescending));
   };
 
-  // goToRanking() {
-  //   const {
-  //     history,
-  //   } = this.props;
+  handleClickPlayAgain = () => {
+    const { dispatch, history } = this.props;
+    dispatch(actionHandled(RESET_GAME));
+    history.push('/');
+  };
 
-  //   history.push('/ranking');
-  // }
+  handleClickRanking = () => {
+    const { dispatch, history } = this.props;
+    dispatch(actionHandled(RESET_GAME));
+    history.push('/ranking');
+  };
 
   render() {
-    const { history } = this.props;
     const { assertions, score } = this.props;
     return (
       <div>
@@ -67,16 +71,16 @@ class Feedback extends React.Component {
         </div>
         <button
           data-testid="btn-play-again"
-          onClick={ () => history.push('/') }
+          onClick={ () => this.handleClickPlayAgain() }
         >
           Play Again
         </button>
-        {/* <h2>{ this.feedbackMessage() }</h2> */}
+
         <Link to="/ranking">
           <button
             type="button"
             data-testid="btn-ranking"
-            onClick={ () => history.push('/ranking') }
+            onClick={ () => this.handleClickRanking() }
           >
             VER RANKING
           </button>

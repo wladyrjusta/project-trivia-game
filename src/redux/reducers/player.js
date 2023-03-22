@@ -1,5 +1,10 @@
-import { USERS_INFO_SAVED, ACESS_REQUEST, UPDATE_SCORE,
-  ASSERTIONS_NUMBER } from '../actions';
+import {
+  USERS_INFO_SAVED,
+  ACESS_REQUEST,
+  UPDATE_SCORE,
+  ASSERTIONS_NUMBER,
+  RESET_GAME,
+} from '../actions';
 
 const INITIAL_STATE = {
   name: '',
@@ -31,6 +36,14 @@ function player(state = INITIAL_STATE, action) {
     return {
       ...state,
       assertions: state.assertions + action.assertions,
+    };
+  case RESET_GAME:
+    return {
+      name: '',
+      gravatarEmail: '',
+      assertions: 0,
+      score: 0,
+      token: '',
     };
 
   default:
