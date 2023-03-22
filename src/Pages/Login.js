@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import md5 from 'crypto-js/md5';
 import BtnSettings from '../components/BtnSettings';
-// import { actionLoginSuccess } from '../redux/actions';
-// import { tokenEndpoint } from '../services/Api';
 import { USERS_INFO_SAVED, actionHandled, acessUserRequest } from '../redux/actions';
 
 class Login extends Component {
@@ -17,18 +14,6 @@ class Login extends Component {
     const { name, value } = target;
     this.setState({ [name]: value });
   };
-
-  // handleClick = (e) => {
-  //   e.preventDefault();
-  //   const { history, infoLogin, fetchingToken } = this.props;
-  //   const { gravatarEmail, name } = this.state;
-  //   const mdiHash = md5(gravatarEmail).toString();
-  //   const imgGravatar = `https://www.gravatar.com/avatar/${mdiHash}`;
-  //   infoLogin({ name, gravatarEmail, imgGravatar });
-  //   fetchingToken(tokenEndpoint());
-
-  //   history.push('/game');
-  // };
 
   handleClick = async () => {
     const { history, dispatch } = this.props;

@@ -20,7 +20,7 @@ function player(state = INITIAL_STATE, action) {
   case ACESS_REQUEST:
     return {
       ...state,
-      token: action.payload, // sem o isLoading
+      token: action.payload,
     };
   case UPDATE_SCORE:
     return {
@@ -33,7 +33,6 @@ function player(state = INITIAL_STATE, action) {
       assertions: state.assertions + action.assertions,
     };
 
-    // Sem o FetchStart
   default:
     return state;
   }

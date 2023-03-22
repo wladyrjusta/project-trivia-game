@@ -11,11 +11,9 @@ export default class Ranking extends Component {
   }
 
   render() {
-    const getRanking = JSON.parse(localStorage.getItem('users'));
-    console.log('getRanking', getRanking);
-    const testOnePlayer = [];
-    testOnePlayer.push(getRanking);
-    console.log(testOnePlayer);
+    const getUsersRanking = JSON.parse(localStorage.getItem('users'));
+    console.log('getRanking', getUsersRanking);
+    // console.log(testOnePlayer);
 
     return (
       <div>
@@ -30,7 +28,7 @@ export default class Ranking extends Component {
 
         </Link>
 
-        {testOnePlayer.map((info, index) => (
+        {getUsersRanking.map((info, index) => (
           <div
             key={ index }
           >

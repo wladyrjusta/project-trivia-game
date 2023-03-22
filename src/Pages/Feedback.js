@@ -5,6 +5,10 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 
 class Feedback extends React.Component {
+  componentDidMount() {
+    this.addUserToLocalStorage();
+  }
+
   feedbackMessage = () => {
     const { assertions } = this.props;
     const magicNumber = 3;
@@ -16,22 +20,41 @@ class Feedback extends React.Component {
     }
   };
 
-  informations() {
-    const { player, history } = this.props;
-    if (!localStorage.getItem('users')) {
-      localStorage.setItem('users', JSON.stringify(player));
-    } else {
-      const addUser = JSON.parse(localStorage.getItem('users'));
-      const users = [...addUser, player];
-      const userSortDescending = users.sort((a, b) => b.score - a.score);
-      localStorage.setItem('users', JSON.stringify(userSortDescending));
-    }
-    history.push('/ranking');
-  }
+  addUserToLocalStorage = () => {
+    const {
+      name,
+      gravatarEmail,
+      assertions,
+      score,
+    } = this.props;
+
+    const user = {
+      name,
+      gravatarEmail,
+      assertions,
+      score,
+    };
+    // console.log(user); // TESTADO CORRETO {name: 'Projeto', gravatarEmail: 'bgvgvgv@gg.com', assertions: 1, score: 70}
+    const getUsers = JSON.parse(localStorage.getItem('users')) || [];
+    console.log('GetUSER', getUsers);
+    const users = [...getUsers, user];
+    // console.log('users antes de sort', users); TESTADO
+    const userSortDescending = users.sort((a, b) => b.score - a.score);
+    // console.log(users); TESTADO
+    localStorage.setItem('users', JSON.stringify(userSortDescending));
+  };
+
+  // goToRanking() {
+  //   const {
+  //     history,
+  //   } = this.props;
+
+  //   history.push('/ranking');
+  // }
 
   render() {
     const { history } = this.props;
-    const { player: { assertions, score } } = this.props;
+    const { assertions, score } = this.props;
     return (
       <div>
         <Header />
@@ -53,7 +76,7 @@ class Feedback extends React.Component {
           <button
             type="button"
             data-testid="btn-ranking"
-            onClick={ () => this.informations() }
+            onClick={ () => history.push('/ranking') }
           >
             VER RANKING
           </button>
@@ -64,7 +87,7 @@ class Feedback extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  ...state,
+  ...state.player,
 });
 
 Feedback.propTypes = {
