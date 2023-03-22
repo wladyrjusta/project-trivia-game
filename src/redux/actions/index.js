@@ -1,5 +1,6 @@
 export const ACESS_REQUEST = 'ACESS_REQUEST';
 export const USERS_INFO_SAVED = 'USERS_INFO_SAVED';
+export const UPDATE_SCORE = 'UPDATE_SCORE';
 
 export const actionHandled = (action, payload) => ({
   type: action,

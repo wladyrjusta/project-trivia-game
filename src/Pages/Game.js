@@ -22,4 +22,3 @@ Game.propTypes = {
 };
 
 export default Game;
-// so criei aqui pra ser renderizado no login
