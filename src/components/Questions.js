@@ -10,9 +10,11 @@ class Questions extends React.Component {
     arrayQuestion: [],
     answered: false,
     randomAnswer: [],
+    timer: 30,
   };
 
   async componentDidMount() {
+    const timer = 1000;
     const recoveredQuestion = localStorage.getItem('token');
     // const { dispatch, allQuestions } = this.props;
     const url = await (await fetch(`https://opentdb.com/api.php?amount=5&token=${recoveredQuestion}`)).json();
@@ -28,6 +30,7 @@ class Questions extends React.Component {
       history.push('/');
     }
     this.questionRender(resultsQuestions);
+    setInterval(() => this.setTimer(), timer);
   }
 
   questionRender = (arrayQuestion) => {
@@ -59,6 +62,19 @@ class Questions extends React.Component {
     }
   };
 
+  setTimer = () => {
+    const { timer } = this.state;
+    if (timer > 0) {
+      this.setState((prevState) => ({
+        timer: prevState.timer - 1,
+      }));
+    } else {
+      this.setState({
+        answered: true,
+      });
+    }
+  };
+
   btnChangeColor = () => {
     this.setState({
       answered: true,
@@ -66,7 +82,7 @@ class Questions extends React.Component {
   };
 
   render() {
-    const { arrayQuestion, indexQuestions, answered, randomAnswer } = this.state;
+    const { arrayQuestion, indexQuestions, answered, randomAnswer, timer } = this.state;
     return (
     //   <div>
     //     {arrayQuestion.length > 0 && (
@@ -120,7 +136,7 @@ class Questions extends React.Component {
                 data-testid={ a.dataTestid }
                 value={ a.correct }
                 onClick={ () => this.btnChangeColor() }
-
+                disabled={ answered }
               >
                 {a.questionsOk}
               </button>
@@ -129,6 +145,9 @@ class Questions extends React.Component {
           )}
         </div>
 
+        <div>
+          {timer}
+        </div>
       </div>
     );
   }
