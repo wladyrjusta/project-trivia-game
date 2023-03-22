@@ -3,16 +3,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 
-feedbackMessage = () => {
+// feedbackMessage = () => {
 // pegar o valor de assertions como prop
-  // const magicNumber = 3;
-  // if (assertions < magicNumber) {
-  //   return 'Could be better...';
-  // }
-  // if (assertions >= magicNumber) {
-  //   return 'Well Done!';
-  // }
-};
+// const magicNumber = 3;
+// if (assertions < magicNumber) {
+//   return 'Could be better...';
+// }
+// if (assertions >= magicNumber) {
+//   return 'Well Done!';
+// }
+// };
 
 class Feedback extends React.Component {
   render() {
