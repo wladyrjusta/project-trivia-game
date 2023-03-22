@@ -1,5 +1,5 @@
 import { USERS_INFO_SAVED, ACESS_REQUEST, UPDATE_SCORE,
-} from '../actions';
+  ASSERTIONS_NUMBER } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
@@ -26,6 +26,11 @@ function player(state = INITIAL_STATE, action) {
     return {
       ...state,
       score: state.score + action.payload,
+    };
+  case ASSERTIONS_NUMBER:
+    return {
+      ...state,
+      assertions: state.assertions + action.assertions,
     };
 
     // Sem o FetchStart
