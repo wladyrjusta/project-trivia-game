@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './Questions.css';
+
+
 // import { connect } from 'react-redux';
 // import { questionsEndpoint } from '../services/Api';
 
@@ -9,29 +11,32 @@ class Questions extends React.Component {
     indexQuestions: 0,
     arrayQuestion: [],
     answered: false,
-    randomAnswer: [],
+    mixedQuestions: [],
     timer: 30,
   };
 
   async componentDidMount() {
     const timer = 1000;
+    const resultsQuestions = await this.questionsFetch();
+    this.questionRender(resultsQuestions);
+    setInterval(() => this.setTimer(), timer);
+  }
+
+  // Separei a Requisicao a API do ComponentDidMount
+  questionsFetch = async () => {
     const recoveredQuestion = localStorage.getItem('token');
-    // const { dispatch, allQuestions } = this.props;
     const url = await (await fetch(`https://opentdb.com/api.php?amount=5&token=${recoveredQuestion}`)).json();
-    const resultsQuestions = url.results;
-    this.setState({
-      arrayQuestion: resultsQuestions,
-    });
-    // dispatch(questionsEndpoint([recoveredQuestion]));
     const invalidToken = 3;
     if (url.response_code === invalidToken) {
       const { history } = this.props;
       localStorage.removeItem('token');
       history.push('/');
     }
-    this.questionRender(resultsQuestions);
-    setInterval(() => this.setTimer(), timer);
-  }
+    this.setState({
+      arrayQuestion: url.results,
+    });
+    return url.results;
+  };
 
   questionRender = (arrayQuestion) => {
     const { indexQuestions } = this.state;
@@ -42,6 +47,7 @@ class Questions extends React.Component {
         questionsOk: arrayQuestion[indexQuestions].correct_answer,
         color: 'green',
       };
+
       const incorrectRender = arrayQuestion[indexQuestions].incorrect_answers
         .map((answer, index) => ({
           dataTestid: `wrong-answer-${index}`,
@@ -53,13 +59,17 @@ class Questions extends React.Component {
         ...incorrectRender,
         correctRender,
       ];
-      const magicNumber = 0.5;
-      const misturaAnswer = questionsAll.sort(() => magicNumber - Math.random());
-      this.setState({
-        randomAnswer: misturaAnswer,
-      });
-      // return misturaAnswer;
+      this.mixQuestions(questionsAll);
     }
+  };
+
+  // Separei a logica que aleatoriza as questoes para ficar mais organizado
+  mixQuestions = (questions) => {
+    const magicNumber = 0.5;
+    const mixedQuestions = questions.sort(() => magicNumber - Math.random());
+    this.setState({
+      mixedQuestions,
+    });
   };
 
   setTimer = () => {
@@ -82,7 +92,13 @@ class Questions extends React.Component {
   };
 
   render() {
-    const { arrayQuestion, indexQuestions, answered, randomAnswer, timer } = this.state;
+    const {
+      arrayQuestion,
+      indexQuestions,
+      answered,
+      mixedQuestions,
+      timer,
+    } = this.state;
     return (
     //   <div>
     //     {arrayQuestion.length > 0 && (
@@ -129,7 +145,7 @@ class Questions extends React.Component {
         <div data-testid="answer-options">
 
           {arrayQuestion.length > 0 && (
-            randomAnswer.map((a) => (
+            mixedQuestions.map((a) => (
               <button
                 key={ a.questionsOk }
                 className={ answered ? a.color : '' }
