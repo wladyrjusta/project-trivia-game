@@ -1,18 +1,18 @@
 body {
+  align-items: center;
   background-color: rgb(92, 92, 92);
   box-sizing: border-box;
-  margin: 0, none;
   display: flex;
-  padding: 20px;
-  align-items: center;
   flex-direction: column;
+  margin: 0, none;
+  padding: 20px;
 }
 
 header {
   background-color: lightgray;
   border-radius: 10px;
-  padding: 10px;
   max-width: 100%;
+  padding: 10px;
 }
 
 button {
